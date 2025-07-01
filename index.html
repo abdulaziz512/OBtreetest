@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>شجرة العباريد</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/images/test.jpeg">
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body id="index-body">
+
+  <div class="search-container">
+    <button class="search-icon" id="searchIcon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+    </button>
+    <input type="text" class="search-box" id="searchBox" placeholder="ابحث عن اسم...">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+  
+  <div class="tree-container">
+    <div id="family-tree"></div>
+    <div id="back-button-wrapper">
+      <button id="treeBackButton" class="back-btn">⬅️ رجوع</button>
+    </div>
+  </div>
+  
+  <div id="stats-dashboard">
+    <div class="stat-card">
+        <h3>إجمالي الأفراد</h3>
+        <p id="total-members-stat">...</p>
+        <i class="stat-icon">👥</i>
+    </div>
+    <div class="stat-card">
+        <h3>الأحياء</h3>
+        <p id="living-stat" class="stat-green">...</p>
+        <i class="stat-icon">❤️</i>
+    </div>
+    <div class="stat-card">
+        <h3>المتوفون</h3>
+        <p id="deceased-stat" class="stat-gray">...</p>
+        <i class="stat-icon">🕊️</i>
+    </div>
+    <div class="stat-card">
+        <h3>عدد الأجيال</h3>
+        <p id="generations-stat">...</p>
+        <i class="stat-icon">🌳</i>
+    </div>
+    <div class="stat-card large-card">
+        <h3>الأسماء الأكثر تكرارًا</h3>
+        <ul id="common-names-stat">
+            <li>جاري التحميل...</li>
+        </ul>
+        <button id="toggle-common-names" class="toggle-stats-btn" style="display: none;">عرض الكل</button>
+        <i class="stat-icon">🏷️</i>
+    </div>
+  </div>
+
+  <div id="add-child-modal" class="request-modal" style="display: none;">
+    <div class="modal-content">
+      <h2>طلب إضافة ابن</h2>
+      <div class="modal-message" id="add-child-modal-message"></div>
+      <p>إضافة ابن إلى: <strong id="add-child-parent-name"></strong></p>
+      <form id="add-child-form">
+        <label for="new-child-name">اسم الابن:</label>
+        <input type="text" id="new-child-name" required>
+        <label for="new-child-avatar-file">صورة (رفع ملف):</label>
+        <input type="file" id="new-child-avatar-file" accept="image/*">
+        <p class="or-text">أو</p>
+        <label for="new-child-avatar-url">رابط صورة:</label>
+        <input type="text" id="new-child-avatar-url" placeholder="اختياري">
+        <div class="modal-buttons">
+          <button type="submit">إرسال الطلب</button>
+          <button type="button" class="close-modal-btn" data-modal="add-child-modal">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="edit-member-modal" class="request-modal" style="display: none;">
+    <div class="modal-content">
+      <h2>طلب تعديل عضو</h2>
+      <div class="modal-message" id="edit-member-modal-message"></div>
+      <p>تعديل: <strong id="edit-member-old-name"></strong></p>
+      <form id="edit-member-form">
+        <label for="edit-new-name">الاسم الجديد:</label>
+        <input type="text" id="edit-new-name" required>
+        <label for="edit-new-avatar-file">صورة جديدة (رفع ملف):</label>
+        <input type="file" id="edit-new-avatar-file" accept="image/*">
+        <p class="or-text">أو</p>
+        <label for="edit-new-avatar-url">رابط صورة جديدة:</label>
+        <input type="text" id="edit-new-avatar-url" placeholder="اختياري">
+        <div class="modal-buttons">
+          <button type="submit">إرسال الطلب</button>
+          <button type="button" class="close-modal-btn" data-modal="edit-member-modal">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="delete-member-modal" class="request-modal" style="display: none;">
+    <div class="modal-content">
+      <h2>طلب حذف عضو</h2>
+      <div class="modal-message" id="delete-member-modal-message"></div>
+      <p>هل أنت متأكد من حذف: <strong id="delete-member-name"></strong>؟</p>
+      <p class="warning-text">ملاحظة: حذف هذا العضو سيؤدي إلى حذف جميع أبنائه أيضاً.</p>
+      <form id="delete-member-form">
+        <input type="hidden" id="delete-member-id"> <div class="modal-buttons">
+          <button type="submit" class="delete-btn">نعم، احذف</button>
+          <button type="button" class="close-modal-btn" data-modal="delete-member-modal">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="welcome-overlay" class="modal-overlay" style="display: none;">
+    <div class="welcome-modal">
+      <button id="close-welcome-modal" class="close-btn">&times;</button>
+      <h2>مرحباً بكم في شجرة عائلة العباريد</h2>
+      <p>يتقدم القائمون على الشجرة بجزيل الشكر والتقدير لكل من ساهم في هذا العمل، ونخص بالذكر:</p>
+      <div class="dedication-names">
+        <button class="name-btn" data-name="عبدالعزيز فواز العبيريد">عبدالعزيز فواز العبيريد</button>
+        <button class="name-btn" data-name="ناصر عبدالرحمن العبيريد">ناصر عبدالرحمن العبيريد</button>
+      </div>
+      <div id="thank-you-message" class="thank-you-note" style="display: none;"></div>
+    </div>
+  </div>
+  
+  <div id="poem-modal" class="modal-overlay" style="display: none;">
+    <div class="poem-modal-content">
+      <button id="close-poem-modal" class="close-btn">&times;</button>
+      <h2 id="poem-modal-title">القصائد</h2>
+      <div id="poem-accordion-container"></div>
+    </div>
+  </div>
+
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>

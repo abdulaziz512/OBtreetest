@@ -1,0 +1,28 @@
+Familytree/
+├── assets/
+│   └── images/
+│       └── test.jpeg
+│   └── uploads/
+├── css/
+│   ├── style.css      // ستايل عام للموقع والشجرة
+│   ├── auth.css       // ستايل صفحة الدخول
+│   └── admin.css      // ستايل لوحة التحكم
+├── data/
+│   └── family.json    // بيانات شجرة العائلة (مصدر رئيسي)
+├── js/
+│   ├── admin.js       // منطق لوحة التحكم
+│   ├── api.js         // التعامل مع API أو التخزين
+│   ├── auth.js        // منطق تسجيل الدخول
+│   ├── auth-utils.js  // أدوات مساعدة للمصادقة
+│   ├── main.js        // عرض الشجرة في الصفحة الرئيسية
+│   ├── proxy.js       // (لم تعد مستخدمة - مكانها الصحيح server/proxy.js)
+├── server/
+│   └── server.js
+├── admin.html         // صفحة لوحة التحكم
+├── index.html         // الصفحة الرئيسية (عرض الشجرة)
+├── login.html         // صفحة تسجيل الدخول
+└── favicon.ico        // أيقونة الموقع
+└──  node_modules
+└──  .env
+└──  package.json
+└──  package-lock.json

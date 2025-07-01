@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة تحكم الشجرة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/images/test.jpeg">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <h1>لوحة تحكم شجرة العائلة</h1>
+    <div id="admin-panel">
+        <div class="tabs">
+            <button id="tab-add" class="active">إضافة عضو</button>
+            <button id="tab-edit">تعديل عضو</button>
+            <button id="tab-remove">حذف عضو</button>
+            <button id="tab-requests">إدارة الطلبات</button>
+            <button id="tab-poems">إدارة القصائد</button>
+        </div>
+
+        <form id="add-form" class="active">
+            <label for="new-name">اسم العضو الجديد:</label>
+            <input type="text" id="new-name" required autocomplete="off">
+            
+            <label for="add-parent-select">اختر الأب:</label>
+            <select id="add-parent-select" required>
+                <option value="" disabled selected>جاري تحميل الأسماء...</option>
+            </select>
+
+            <label for="add-birth-year">سنة الميلاد (اختياري):</label>
+            <input type="number" id="add-birth-year" placeholder="مثال: 1950" min="1800" max="2025">
+
+            <div class="image-upload-options">
+                <label>رفع صورة (اختياري): <input type="file" id="new-avatar-file" accept="image/*"></label>
+                <p class="or-separator">أو</p>
+                <label>رابط الصورة (اختياري): <input type="text" id="new-avatar-url" placeholder="assets/images/test.jpeg" autocomplete="off"></label>
+            </div>
+            <div class="form-buttons">
+                <button type="submit">إضافة</button>
+            </div>
+        </form>
+
+        <form id="edit-form">
+            <label for="edit-member-select">اختر عضو للتعديل:</label>
+            <select id="edit-member-select" required>
+                <option value="" disabled selected>جاري تحميل الأسماء...</option>
+            </select>
+            
+            <label for="edit-new-name">الاسم الجديد:</label>
+            <input type="text" id="edit-new-name" autocomplete="off" required>
+
+            <label for="edit-birth-year">سنة الميلاد (اختياري):</label>
+            <input type="number" id="edit-birth-year" placeholder="مثال: 1950" min="1800" max="2025">
+            
+            <div class="form-group-checkbox">
+                <input type="checkbox" id="edit-is-deceased">
+                <label for="edit-is-deceased" class="checkbox-label">متوفى</label>
+            </div>
+
+            <label for="edit-no-children-context">صيغة عرض "لا يوجد أبناء" (عندما لا يوجد أبناء):</label>
+            <select id="edit-no-children-context">
+                <option value="DEFAULT">الحالة الافتراضية (لم تُسجل له ذرية بعد)</option>
+                <option value="HISTORICAL_FINAL">لم يُعقِب (للشخصيات التاريخية)</option>
+                <option value="IS_CHILD">إخفاء الرسالة (للأطفال الصغار)</option>
+                <option value="PRIVATE">ذريته غير مسجلة (للخصوصية)</option>
+            </select>
+
+            <div class="image-upload-options">
+                 <label>رفع صورة جديدة (اختياري): <input type="file" id="edit-new-avatar-file" accept="image/*"></label>
+                 <p class="or-separator">أو</p>
+                 <label>رابط صورة جديد (اختياري): <input type="text" id="edit-new-avatar-url" placeholder="اتركه فارغًا للإبقاء على الصورة الحالية" autocomplete="off"></label>
+            </div>
+            <div class="form-buttons">
+                <button type="submit">تعديل</button>
+            </div>
+        </form>
+
+        <form id="remove-form">
+            <label for="remove-member-select">اختر عضو للحذف:</label>
+            <select id="remove-member-select" required>
+                <option value="" disabled selected>جاري تحميل الأسماء...</option>
+            </select>
+            <p class="warning-text">تحذير: حذف هذا العضو سيؤدي إلى حذف جميع أبنائه وفروعه.</p>
+            <div class="form-buttons">
+                <button type="submit" class="red-button">حذف نهائي</button>
+            </div>
+        </form>
+
+        <div id="requests-form">
+            <h2 class="requests-title">الطلبات المعلقة</h2>
+            <div id="requests-list">
+                <p class="loading-requests">جاري تحميل الطلبات...</p>
+            </div>
+        </div>
+        
+        <div id="poems-form" style="display: none;">
+            <div class="poems-container">
+                <div class="add-poem-form">
+                    <h3>إضافة قصيدة جديدة</h3>
+                    <form id="poem-submission-form">
+                        <label>عنوان القصيدة:
+                            <input type="text" id="poem-title" required autocomplete="off">
+                        </label>
+                        <label>الشاعر (اختر من القائمة):
+                            <select id="poem-poet-select" required>
+                                <option value="" disabled selected>-- اختر الشاعر --</option>
+                            </select>
+                        </label>
+                        <label>نص القصيدة:
+                            <textarea id="poem-content" rows="10" required></textarea>
+                        </label>
+                        <button type="submit">حفظ القصيدة</button>
+                    </form>
+                </div>
+                <div class="poems-list">
+                    <h3>قائمة القصائد المحفوظة</h3>
+                    <div id="poems-list-container">
+                        <p>جاري تحميل القصائد...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="admin-message"></div>
+    </div>
+    
+    <div id="modify-request-modal" class="request-modal" style="display: none;">
+        <div class="modal-content">
+            <h2>تعديل الطلب</h2>
+            <form id="modify-request-form">
+                <input type="hidden" id="modify-request-id">
+                <input type="hidden" id="modify-request-type">
+                <div id="modify-fields-container"></div>
+                <div class="modal-buttons">
+                    <button type="submit" class="approve-btn">حفظ التعديلات والموافقة</button>
+                    <button type="button" class="close-modal-btn" data-modal="modify-request-modal">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="data-editor-section">
+        <h2>محرر بيانات الشجرة (JSON)</h2>
+        <p style="text-align: center; color: #666; font-size: 0.95rem;">
+            يمكنك تعديل بيانات الشجرة مباشرة كـ JSON هنا، ثم النقر على "حفظ جميع التغييرات".
+        </p>
+        <textarea id="data-editor" class="data-editor"></textarea>
+        <button id="save-all-btn">حفظ جميع التغييرات</button>
+    </div>
+
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>
